@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 require("dotenv").config();
 
 const route = require('./routes/client/index.route');
+const routeAdmin = require('./routes/admin/index.route');
 
 const database = require('./config/database');
 database.connect();
@@ -15,8 +16,13 @@ app.set('view engine', 'pug');
 
 app.use(express.static("public"))
 
+// App Locals Variables
+const systemConfig = require('./config/system');
+app.locals.prefixAdmin = systemConfig.prefixAdmin;
+
 //route
-route(app)
+route(app);
+routeAdmin(app);
 
 
 app.listen(port, () => {
