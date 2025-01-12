@@ -2,6 +2,8 @@ const Product = require('../../models/products.model')
 
 const filterStatusHelper = require('../../helpers/filterStatus');
 const searchHelper = require('../../helpers/search');
+const paginationHelper = require('../../helpers/pagination');
+
 // [GET] /admin/products
 module.exports.index = async (req, res) => {
 
@@ -33,20 +35,22 @@ module.exports.index = async (req, res) => {
     // console.log(find);
 
     //pagination
-    let objectPagination = {
+    const countProducts = await Product.countDocuments(find);
+
+    let objectPagination = paginationHelper({
         currentPage: 1,
         limitItem: 4
-    }
+    }, req.query, countProducts);
 
     if(req.query.page) {
         objectPagination.currentPage = parseInt(req.query.page);
     }
 
-    // get number of pages
-    const countProducts = await Product.countDocuments(find);
-    const totalPage = Math.ceil(countProducts / objectPagination.limitItem);
-    objectPagination.totalPage = totalPage;
-    // end pagination
+    // // get number of pages
+    // const countProducts = await Product.countDocuments(find);
+    // const totalPage = Math.ceil(countProducts / objectPagination.limitItem);
+    // objectPagination.totalPage = totalPage;
+    // // end pagination
 
     //equator for getting THE FIRST index of item you want:
     // itemYouWant = (currentPage - 1) * itemsOnOnePage
