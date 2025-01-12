@@ -67,3 +67,20 @@ if(formSearch){
         window.location.href = url.href;
     });
 }
+
+// End form search
+
+// Pagination
+const buttonsPagination = document.querySelectorAll('[button-pagination]');
+if(buttonsPagination){
+    let url = new URL(window.location.href);
+
+    buttonsPagination.forEach(button => {
+        button.addEventListener('click', (e) => {
+            const page = button.getAttribute('button-pagination');
+            url.searchParams.set('page', page);
+            window.location.href = url.href;
+        })
+    });
+}
+// End Pagination
