@@ -1,47 +1,36 @@
 const Product = require('../../models/products.model')
 
+const filterStatusHelper = require('../../helpers/filterStatus');
+const searchHelper = require('../../helpers/search');
 // [GET] /admin/products
 module.exports.index = async (req, res) => {
-    // console.log(req.query.status);
-    // console.log(req.query.keyword);
-
-    let filterStatus = [
-        {
-            name: 'Tat ca',
-            status: '',
-            class: ''
-        },
-        {
-            name: 'Hoat dong',
-            status: 'active',
-            class: ''
-        },
-        {
-            name: 'Dung hoat dong',
-            status: 'inactive',
-            class: ''
-        }
-    ]
 
     let find = {
         deleted: false, 
         // title: /a/i
     };
 
-    if(req.query.keyword){
-        find.title = new RegExp(req.query.keyword, 'i'); // Use a regular expression for case-insensitive search
-    }
-
-    // console.log(find.title);
+    //filter
+    const filterStatus = filterStatusHelper(req.query);
+    console.log(filterStatus);
 
     if(req.query.status){
-        const index =filterStatus.findIndex(item => item.status == req.query.status);
-        filterStatus[index].class = 'active';
         find.status = req.query.status;
-    }else{
-        const index = filterStatus.findIndex(item => item.status == '');
-        filterStatus[index].class = 'active';
     }
+
+    //search
+    const objectSearch = searchHelper(req.query);
+    console.log(objectSearch);
+
+    if(objectSearch.regex){
+        find.title = objectSearch.regex;
+    }
+
+    // if(req.query.keyword){
+    //     find.title = new RegExp(req.query.keyword, 'i'); // Use a regular expression for case-insensitive search
+    // }
+
+    // console.log(find);
 
     const products = await Product.find(find);
     res.render('admin/pages/products/index', {
