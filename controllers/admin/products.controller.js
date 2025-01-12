@@ -3,7 +3,8 @@ const Product = require('../../models/products.model')
 // [GET] /admin/products
 module.exports.index = async (req, res) => {
     // console.log(req.query.status);
-    
+    // console.log(req.query.keyword);
+
     let filterStatus = [
         {
             name: 'Tat ca',
@@ -23,8 +24,15 @@ module.exports.index = async (req, res) => {
     ]
 
     let find = {
-        deleted: false 
+        deleted: false, 
+        // title: /a/i
     };
+
+    if(req.query.keyword){
+        find.title = new RegExp(req.query.keyword, 'i'); // Use a regular expression for case-insensitive search
+    }
+
+    // console.log(find.title);
 
     if(req.query.status){
         const index =filterStatus.findIndex(item => item.status == req.query.status);
@@ -34,9 +42,8 @@ module.exports.index = async (req, res) => {
         const index = filterStatus.findIndex(item => item.status == '');
         filterStatus[index].class = 'active';
     }
-    
+
     const products = await Product.find(find);
-    // console.log(products);
     res.render('admin/pages/products/index', {
         pageTitle: 'DSSP',
         products: products,
