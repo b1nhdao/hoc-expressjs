@@ -90,18 +90,21 @@ module.exports.deleteItem = async (req, res) => {
 
 module.exports.changeMulti = async (req, res) => {
     const type = req.body.type;
-    const ids = req.body.ids;
+    const ids = req.body.ids.split(', ');
+    console.log(type);
+    console.log(ids);
     switch (type) {
         case 'active':
             //why? i dont know. it will takes the _id in array ids[];
-            await Product.updateMany(({_id: {$in: ids}}), {status: active});
+            await Product.updateMany({_id: {$in: ids}}, {status: "active"});
             break;
         case 'inactive':
-            await Product.updateMany(({_id: {$in: ids}}), {status: inactive});
+            await Product.updateMany({_id: { $in: ids }}, {status: 'inactive'});
             break;
     
         default:
             alert('Hay chon 1 trang thai truoc khi submit !')
             break;
     }
+    res.redirect('back')
 }
