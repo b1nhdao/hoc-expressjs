@@ -9,7 +9,6 @@ module.exports.index = async (req, res) => {
 
     let find = {
         deleted: false, 
-        // title: /a/i
     };
 
     //filter
@@ -46,12 +45,6 @@ module.exports.index = async (req, res) => {
         objectPagination.currentPage = parseInt(req.query.page);
     }
 
-    // // get number of pages
-    // const countProducts = await Product.countDocuments(find);
-    // const totalPage = Math.ceil(countProducts / objectPagination.limitItem);
-    // objectPagination.totalPage = totalPage;
-    // // end pagination
-
     //equator for getting THE FIRST index of item you want:
     // itemYouWant = (currentPage - 1) * itemsOnOnePage
     objectPagination.skip = (objectPagination.currentPage - 1) * objectPagination.limitItem;
@@ -68,4 +61,14 @@ module.exports.index = async (req, res) => {
         keyword: objectSearch.keyword,
         pagination: objectPagination
     });
+}
+
+// [PATCH] /admin/products/:status/:id
+module.exports.changeStatus = async (req, res) => {
+    const status = req.params.status;
+    const id = req.params.id;
+
+    await Product.updateOne({_id: id}, {status: status})
+
+    res.redirect('back');
 }

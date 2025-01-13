@@ -3,7 +3,6 @@ const buttonStatus = document.querySelectorAll('[button-status]')
 
 if(buttonStatus.length > 0){
     let url = new URL(window.location.href);
-    console.log(url);
 
     buttonStatus.forEach(button => {
         button.addEventListener('click', () => {
@@ -45,7 +44,6 @@ if(buttonStatus.length > 0){
 let url = new URL(window.location.href);
 const urlKeyword = url.searchParams.get('keyword');
 const keywordInput = document.querySelector('#keyword');
-console.log(urlKeyword);
     if(urlKeyword){
         keywordInput.value = urlKeyword;
     }
