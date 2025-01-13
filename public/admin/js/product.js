@@ -20,3 +20,24 @@ if(buttonsChangeStatus){
         });
     }); 
 }
+
+const buttonsDelete = document.querySelectorAll('[button-delete]');
+if(buttonsDelete){
+    const formDelete = document.querySelector('#form-delete');
+    let path = formDelete.getAttribute('data-path');
+    // console.log(formDelete.action + path);
+    buttonsDelete.forEach(button => {
+        button.addEventListener('click', () => {
+            const isConfirm = confirm('Ban co chan chan muon xoa san pham nay khong ?');
+
+            if(isConfirm){
+                const id = button.getAttribute('data-id');
+                const action = `${path}/${id}?_method=DELETE`;
+                // const action = `${path}/${id}?_method=DELETE`;
+                formDelete.action = action;
+
+                formDelete.submit();
+            }
+        })
+    });
+}

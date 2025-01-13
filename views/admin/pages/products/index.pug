@@ -79,8 +79,10 @@ block main
                                              data-id = item.id 
                                              class='badge badge-danger') Dung hoat dong 
                                     td 
-                                        button(class='btn btn-warning btn-sm') Sua
-                                        button(class='btn btn-danger btn-sm ml-1') Xoa
+                                        button( class='btn btn-warning btn-sm') Sua
+                                        button( class='btn btn-danger btn-sm ml-1'
+                                                data-id = item.id
+                                                button-delete) Xoa
 
     +pagination(pagination)
     //- nav
@@ -99,5 +101,7 @@ block main
     //-                 button(class = "page-link" button-pagination = pagination.currentPage + 1) Ke tiep 
 
     form(action="" method="POST" id="form-change-status" data-path=`${prefixAdmin}/products/change-status`) 
+
+    form(action="" method="POST" id="form-delete" data-path=`${prefixAdmin}/products/delete`) 
 
     script(src="/admin/js/product.js") 

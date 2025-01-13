@@ -63,12 +63,30 @@ module.exports.index = async (req, res) => {
     });
 }
 
-// [PATCH] /admin/products/:status/:id
+// [PATCH] /admin/products/change-status/:status/:id
+
+// [DELETE]:
 module.exports.changeStatus = async (req, res) => {
     const status = req.params.status;
     const id = req.params.id;
 
+    // delete:
+    // await Prodcut.deleteOne(_id: id});
     await Product.updateOne({_id: id}, {status: status})
 
     res.redirect('back');
 }
+
+// [PATCH] /admin/prodcuts/delete/:id
+module.exports.deleteItem = async (req, res) => {
+    const id = req.params.id;
+
+    // await Product.deleteOne({_id: id});
+    await Product.updateOne({_id: id}, {deleted: true, deletedAt: new Date()})
+    res.redirect('back');
+}
+
+// Lam gi tiep theo? Them 1 trang thung rac, co chuc nang khoi phuc san pham da xoa
+
+//neu muon delete khoi DB, su dung .delete;
+// router.delete('/delete/:id', controller.deleteItem);
