@@ -35,9 +35,9 @@ if(buttonsDelete){
                 const action = `${path}/${id}?_method=DELETE`;
                 // const action = `${path}/${id}?_method=DELETE`;
                 formDelete.action = action;
-
                 formDelete.submit();
             }
         })
     });
 }
+

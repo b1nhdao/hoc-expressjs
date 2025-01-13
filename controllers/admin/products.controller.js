@@ -88,5 +88,20 @@ module.exports.deleteItem = async (req, res) => {
 
 // Lam gi tiep theo? Them 1 trang thung rac, co chuc nang khoi phuc san pham da xoa
 
-//neu muon delete khoi DB, su dung .delete;
-// router.delete('/delete/:id', controller.deleteItem);
+module.exports.changeMulti = async (req, res) => {
+    const type = req.body.type;
+    const ids = req.body.ids;
+    switch (type) {
+        case 'active':
+            //why? i dont know. it will takes the _id in array ids[];
+            await Product.updateMany(({_id: {$in: ids}}), {status: active});
+            break;
+        case 'inactive':
+            await Product.updateMany(({_id: {$in: ids}}), {status: inactive});
+            break;
+    
+        default:
+            alert('Hay chon 1 trang thai truoc khi submit !')
+            break;
+    }
+}

@@ -25,6 +25,10 @@ app.use(express.static("public"))
 var methodOverride = require('method-override');
 app.use(methodOverride('_method'))
 
+// body parser
+var bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({extended: false}))
+
 // App Locals Variables
 const systemConfig = require('./config/system');
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
