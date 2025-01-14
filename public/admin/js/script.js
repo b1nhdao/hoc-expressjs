@@ -102,24 +102,43 @@ if(formChangeMulti){
     formChangeMulti.addEventListener('submit', (e) => {
         e.preventDefault();
         
-        const checkall = checkboxMulti.querySelector("input[name='checkall']");
         const inputsChecked = checkboxMulti.querySelectorAll("input[name='id']:checked");
     //    console.log(inputsChecked); 
        
-       if(inputsChecked){
+        const typeChange = document.querySelector('select[name="type"]').value;
+        if(typeChange == 'delete-all' && inputsChecked.length > 0){
+            const isConfirm = confirm('Ban co chac chan muon xoa nhung san pham nay khong ?');
+            if(!isConfirm){
+                return;
+            }
+        }
+        else if(typeChange == 'none'){
+            alert('Chon mot hanh dong ');
+            return;
+        }
+        
+       if(inputsChecked.length != 0){
             let ids = [];
             const inputIds = formChangeMulti.querySelector('input[name="ids"]');
             inputsChecked.forEach(item => {
                 const id = item.getAttribute('value');
-                ids.push(id);
+                if(typeChange == 'change-position'){
+                    const position = item.closest('tr').querySelector('input[name="position"]').value;
+                    ids.push(`${id}-${position}`);
+                    // console.log(`${id}-${position}`);
+                }
+                else{
+                    ids.push(id);
+                }
             })
+
             // console.log(ids);
             // console.log(inputIds.value);
             inputIds.value = ids.join(', ');
             formChangeMulti.submit();
        }
        else{
-        alert('Hay chon it nhat 1 ban ghi')
+        alert('Hay chon it nhat 1 ban ghi');
        }
     });
 }

@@ -51,6 +51,7 @@ module.exports.index = async (req, res) => {
 
 
     const products = await Product.find(find)
+        .sort({position: 'desc'})
         .limit(objectPagination.limitItem)
         .skip(objectPagination.skip);
 
@@ -88,11 +89,10 @@ module.exports.deleteItem = async (req, res) => {
 
 // Lam gi tiep theo? Them 1 trang thung rac, co chuc nang khoi phuc san pham da xoa
 
+// [PATCH] /admin/products/change-multi
 module.exports.changeMulti = async (req, res) => {
     const type = req.body.type;
     const ids = req.body.ids.split(', ');
-    console.log(type);
-    console.log(ids);
     switch (type) {
         case 'active':
             //why? i dont know. it will takes the _id in array ids[];
@@ -101,9 +101,16 @@ module.exports.changeMulti = async (req, res) => {
         case 'inactive':
             await Product.updateMany({_id: { $in: ids }}, {status: 'inactive'});
             break;
-    
+        case 'delete-all':
+            await Product.updateMany({_id: { $in:ids }}, {deleted: true, deletedAt: new Date()});
+            break;
+        case 'change-position':
+            for(const item of ids){
+                let [id, position] = item.split('-');
+                position = parseInt(position);
+                await Product.updateOne({_id: id},{position: position});
+            }
         default:
-            alert('Hay chon 1 trang thai truoc khi submit !')
             break;
     }
     res.redirect('back')
