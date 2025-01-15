@@ -71,11 +71,11 @@ module.exports.changeStatus = async (req, res) => {
     const status = req.params.status;
     const id = req.params.id;
 
+    await Product.updateOne({_id: id}, {status: status})
+    req.flash('success', 'Cap nhat trang thai thanh cong !')
+    res.redirect('back');
     // delete:
     // await Prodcut.deleteOne(_id: id});
-    await Product.updateOne({_id: id}, {status: status})
-
-    res.redirect('back');
 }
 
 // [PATCH] /admin/prodcuts/delete/:id
@@ -113,5 +113,6 @@ module.exports.changeMulti = async (req, res) => {
         default:
             break;
     }
+    req.flash("success", `Cap nhat trang thai thanh cong cua ${ids.length} san pham`)
     res.redirect('back')
 }

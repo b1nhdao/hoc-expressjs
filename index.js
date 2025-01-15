@@ -29,6 +29,18 @@ app.use(methodOverride('_method'))
 var bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended: false}))
 
+// cookie parser
+var cookieParser = require('cookie-parser')
+
+// express-session
+var session = require('express-session')
+
+// express-flash
+const flash = require('express-flash');
+app.use(cookieParser('keyboard cat'));
+app.use(session({ cookie: { maxAge: 60000 }}));
+app.use(flash());
+
 // App Locals Variables
 const systemConfig = require('./config/system');
 app.locals.prefixAdmin = systemConfig.prefixAdmin;
