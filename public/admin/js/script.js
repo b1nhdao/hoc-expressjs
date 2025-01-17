@@ -156,3 +156,18 @@ if(showAlert){
         showAlert.classList.add('alert-hidden');
     });
 }
+
+// upload image
+const uploadImage = document.querySelector('[upload-image]');
+if(uploadImage){
+    const uploadImageInput = document.querySelector('[upload-image-input');
+    const uploadImagePreview = document.querySelector('[upload-image-preview');
+    uploadImageInput.addEventListener('change', (e) => {
+        // console.log(e.target.files[0] );
+        const [file] = uploadImageInput.files;
+        if(file){
+            uploadImagePreview.src = URL.createObjectURL(file);
+        }
+    })
+}
+// end upload image

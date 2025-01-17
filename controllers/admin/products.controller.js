@@ -66,8 +66,6 @@ module.exports.index = async (req, res) => {
     });
 }
 
-// [PATCH] /admin/products/change-status/:status/:id
-
 // [DELETE]:
 module.exports.changeStatus = async (req, res) => {
     const status = req.params.status;
@@ -133,6 +131,18 @@ module.exports.create = (req, res) => {
 
 // [POST] /admin/products/create
 module.exports.createPost = async (req, res) => {
+    if(!req.body.title){
+        req.flash('error', 'Hay nhap tieu de san pham');
+        res.redirect('back')
+        return;
+    }
+
+    if(!req.body.title.length < 8){
+        req.flash('error', 'Hay nhap it nhieu hon 8 ki tu');
+        res.redirect('back');
+        return;
+    }
+
     req.body.price = parseInt(req.body.price);
     req.body.discountPercent = parseInt(req.body.discountPercent);
     req.body.stock = parseInt(req.body.stock);
@@ -144,7 +154,9 @@ module.exports.createPost = async (req, res) => {
         req.body.position = parseInt(req.body.position); 
     }
 
-    req.body.thumbnail = `/uploads/${req.file.filename}`;
+    if(req.file){
+        req.body.thumbnail = `/uploads/${req.file.filename}`;
+    }
 
     // console.log(req.body);
     console.log(req.file);
@@ -153,4 +165,47 @@ module.exports.createPost = async (req, res) => {
     await product.save();
 
     res.redirect(`${systemConfig.prefixAdmin}/products`);
+}
+
+// [GET] /admin/products/edit/:id
+module.exports.edit = async (req, res) => {
+
+
+    try{
+        const find = {
+            _id: req.params.id
+        }
+        const product = await Product.findOne(find)
+        res.render('admin/pages/products/edit', {
+            pageTitle: 'Chinh sua san pham',
+            product: product
+        });
+    }
+    catch(error){
+        req.flash('error', 'San pham khong ton tai');
+        res.redirect(`${systemConfig.prefixAdmin}/products`);
+    }
+}
+
+// [PATCH] admin/products/edit/id
+module.exports.editPatch = async (req, res) => {
+    if(req.file){
+        req.body.thumbnail = `/uploads/${req.file.filename}`;
+    }
+
+    try{
+        await Product.updateOne({_id: req.params.id}, req.body);
+        req.flash('success', 'Cap nhat thanh cong');
+    }
+    catch(error){
+        res.send('dit me may');
+        req.flash('error', 'Cap nhat that bai');
+    }
+    // await Product.updateOne(_id = req.params.id, productFixed);
+    // console.log(productFixed);
+    // console.log(req.params);
+    // console.log(req);
+    // await Product.updateOne(req.)
+
+    res.redirect(`back`);
 }
