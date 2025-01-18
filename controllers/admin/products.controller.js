@@ -137,12 +137,6 @@ module.exports.createPost = async (req, res) => {
         return;
     }
 
-    if(!req.body.title.length < 8){
-        req.flash('error', 'Hay nhap it nhieu hon 8 ki tu');
-        res.redirect('back');
-        return;
-    }
-
     req.body.price = parseInt(req.body.price);
     req.body.discountPercent = parseInt(req.body.discountPercent);
     req.body.stock = parseInt(req.body.stock);

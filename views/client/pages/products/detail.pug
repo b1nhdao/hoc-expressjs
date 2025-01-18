@@ -1,0 +1,16 @@
+extends ../../layouts/default.pug
+
+block main 
+    .container.my-3 
+        .row
+            .col-12
+                h1(class="mb-4") #{product.title}
+                div(class="mb-4") Gia: <b>#{product.price}$</b>
+                div(class="mb-4") Giam gia: <b>#{product.discountPercentage}%</b>
+                div(class="mb-4") Con lai: <b>#{product.stock}</b>
+                div(class="mb-4")
+                    img(src=product.thumbnail, alt="your thumbnail" style="width: 400px")
+                div(class="mb-4") Mo ta: #{product.description}
+                
+                //- h1(class="mb-4") #{product.title}
+                //- div(class="mb-4") Gia: <b>#{product.price}$</b>

@@ -5,11 +5,11 @@ module.exports.createPost = (req, res, next) => {
         return;
     }
 
-    if(req.body.title.length < 8){
-        req.flash('error', 'Hay nhap nhieu hon 8 ki tu');
-        res.redirect('back');
-        return;
-    }
+    // if(req.body.title.length < 8){
+    //     req.flash('error', 'Hay nhap nhieu hon 8 ki tu');
+    //     res.redirect('back');
+    //     return;
+    // }
 
     next();
 }

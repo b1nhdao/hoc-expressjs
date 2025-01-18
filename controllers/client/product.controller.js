@@ -1,9 +1,9 @@
 const Product = require('../../models/products.model');
 
 // [GET] /products
-module.exports.index = async (reg, res) => {
+module.exports.index = async (req, res) => {
     const products = await Product.find({
-        // status: 'active',
+        status: 'active',
         deleted: false
     }).sort({position: "desc"});
 
@@ -19,3 +19,17 @@ module.exports.index = async (reg, res) => {
 
     // console.log(newProduct);
 }
+
+// [GET] product/:slug
+module.exports.detail = async (req, res) => {
+    try{
+        const product = await Product.findOne({slug: req.params.slug});
+        res.render('client/pages/products/detail.pug', {
+            pageTitle: product.title,
+            product: product
+        });
+    }
+    catch(error){
+        res.send(error);
+    }
+} 
