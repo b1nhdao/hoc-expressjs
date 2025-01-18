@@ -209,3 +209,20 @@ module.exports.editPatch = async (req, res) => {
 
     res.redirect(`back`);
 }
+
+module.exports.detail = async (req, res) => {
+    // res.send('ok');
+    // console.log(req.params.id);
+    // console.log(productFound);
+
+    try{
+        const productFound = await Product.findOne({_id: req.params.id});
+        res.render('admin/pages/products/detail.pug', {
+            product: productFound,
+            pageTitle: productFound.title
+        });
+    }
+    catch(error){
+        res.send(`Loi gi ko biet luon. alicia meu :D \n ${error}`)
+    }
+}
