@@ -4,6 +4,7 @@ include ../../mixins/search.pug
 include ../../mixins/pagination.pug
 include ../../mixins/form-change-multi.pug
 include ../../mixins/alert.pug
+include ../../mixins/sort.pug
 
 block main 
     +alert-success(5000)
@@ -18,71 +19,77 @@ block main
                     +filterStatus(filterStatus)
 
                 .col-6.mb-3
-                    +search()                    
-            
-            .card.mb-3
-                .card-header Danh sach 
-                    .row 
-                        .col-8
-                            +form-change-multi(`${prefixAdmin}/products/change-multi/?_method=PATCH`)
-                        .col-4 
-                            a(
-                                href=`${prefixAdmin}/products/create`
-                                class='btn btn-outline-success right'
-                            ) + Them moi
-                    table(class = "table table-hover table-sm"
-                          checkbox-multi)
-                        thead 
-                            tr 
-                                th 
-                                    input(type="checkbox" name="checkall")
-                                th STT
-                                th Hinh anh
-                                th Tieu de
-                                th Gia
-                                th Vi tri
-                                th Trang thai
-                                th Hanh dong
+                    +search()
 
-                        tbody 
-                            each item, index in products 
-                                tr 
-                                    td 
-                                        input(type="checkbox" name="id" value=item.id)
-                                    td #{index + (pagination.limitItem * (pagination.currentPage - 1)) + 1} 
-                                    td  
-                                        img(src = item.thumbnail, alt = item.title width='100px' height='auto')
-                                    td #{item.title}
-                                    td #{item.price}$
-                                    td 
-                                        input(
-                                            type="number"
-                                            value=item.position 
-                                            style="width: 60px"
-                                            min="1"
-                                            name="position"
-                                        )
-                                    td 
-                                        if (item.status == 'active')
-                                            a(href="javascript:;"
-                                             data-status="active"
-                                             button-change-status 
-                                             data-id= item.id
-                                             class='badge badge-success') Hoat dong 
-                                        else
-                                            a(href="javascript:;"
-                                             data-status="inactive"
-                                             button-change-status
-                                             data-id = item.id 
-                                             class='badge badge-danger') Dung hoat dong   
-                                    td 
-                                        a(href=`${prefixAdmin}/products/detail/${item.id}`
-                                            class="btn btn-secondary btn-sm mr-1") Chi tiet 
-                                        a(href=`${prefixAdmin}/products/edit/${item.id}`)
-                                            button( class='btn btn-warning btn-sm') Sua
-                                        button( class='btn btn-danger btn-sm ml-1'
-                                                data-id = item.id
-                                                button-delete) Xoa
+    .card.mb-3 
+        +sort()
+    
+    .card.mb-3
+        .card-header Danh sach 
+            .row 
+                .col-8
+                    +form-change-multi(`${prefixAdmin}/products/change-multi/?_method=PATCH`)
+                .col-4 
+                    a(
+                        href=`${prefixAdmin}/products/create`
+                        class='btn btn-outline-success right'
+                    ) + Them moi
+
+
+
+            table(class = "table table-hover table-sm"
+                    checkbox-multi)
+                thead 
+                    tr 
+                        th 
+                            input(type="checkbox" name="checkall")
+                        th STT
+                        th Hinh anh
+                        th Tieu de
+                        th Gia
+                        th Vi tri
+                        th Trang thai
+                        th Hanh dong
+
+                tbody 
+                    each item, index in products 
+                        tr 
+                            td 
+                                input(type="checkbox" name="id" value=item.id)
+                            td #{index + (pagination.limitItem * (pagination.currentPage - 1)) + 1} 
+                            td  
+                                img(src = item.thumbnail, alt = item.title width='100px' height='auto')
+                            td #{item.title}
+                            td #{item.price}$
+                            td 
+                                input(
+                                    type="number"
+                                    value=item.position 
+                                    style="width: 60px"
+                                    min="1"
+                                    name="position"
+                                )
+                            td 
+                                if (item.status == 'active')
+                                    a(href="javascript:;"
+                                        data-status="active"
+                                        button-change-status 
+                                        data-id= item.id
+                                        class='badge badge-success') Hoat dong 
+                                else
+                                    a(href="javascript:;"
+                                        data-status="inactive"
+                                        button-change-status
+                                        data-id = item.id 
+                                        class='badge badge-danger') Dung hoat dong   
+                            td 
+                                a(href=`${prefixAdmin}/products/detail/${item.id}`
+                                    class="btn btn-secondary btn-sm mr-1") Chi tiet 
+                                a(href=`${prefixAdmin}/products/edit/${item.id}`)
+                                    button( class='btn btn-warning btn-sm') Sua
+                                button( class='btn btn-danger btn-sm ml-1'
+                                        data-id = item.id
+                                        button-delete) Xoa
 
     +pagination(pagination)
     //- nav
