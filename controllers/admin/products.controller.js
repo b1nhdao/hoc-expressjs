@@ -148,12 +148,12 @@ module.exports.createPost = async (req, res) => {
         req.body.position = parseInt(req.body.position); 
     }
 
-    if(req.file){
-        req.body.thumbnail = `/uploads/${req.file.filename}`;
-    }
+    // if(req.file){
+    //     req.body.thumbnail = `/uploads/${req.file.filename}`;
+    // }
 
     // console.log(req.body);
-    console.log(req.file);
+    // console.log(req.file);
 
     const product = new Product(req.body);
     await product.save();
@@ -163,8 +163,6 @@ module.exports.createPost = async (req, res) => {
 
 // [GET] /admin/products/edit/:id
 module.exports.edit = async (req, res) => {
-
-
     try{
         const find = {
             _id: req.params.id

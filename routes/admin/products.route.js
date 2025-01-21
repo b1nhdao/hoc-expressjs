@@ -2,7 +2,13 @@ const express = require('express');
 // multer
 const multer = require('multer');
 const storageMuller = require('../../helpers/storageMulter');
-const upload = multer({storage: storageMuller()});
+//for local only
+// const upload = multer({storage: storageMuller()});
+
+//uploadCloud middleware
+const uploadCloud = require('../../middlewares/admin/uploadCloud.middleware');
+
+const upload = multer();
 const validate = require('../../validates/admin/product.validate');
 
 const router = express.Router();
@@ -18,7 +24,7 @@ router.patch('/change-multi/', controller.changeMulti);
 
 router.get('/create', controller.create);
 
-router.post('/create',upload.single('thumbnail'), validate.createPost, controller.createPost);
+router.post('/create',upload.single('thumbnail'), uploadCloud.upload, validate.createPost, controller.createPost);
 
 router.get('/edit/:id', controller.edit)
 
