@@ -12,6 +12,19 @@ block main
     h1 Danh muc san pham 
 
     .card.mb-3
+        .card-header Bo loc va tim kiem 
+        .card-body 
+            .row 
+                .col-6.mb-3 
+                    //- +filterStatus()
+                .col-6.mb-3 
+                    +search()
+
+    .card.mb-3 
+        .card-header Sap xep
+        +sortCategory()
+
+    .card.mb-3.mt-3
         .card-header Danh sach 
             .row 
                 .col-8
@@ -19,7 +32,7 @@ block main
                 .col-4 
                     a(
                         href=`${prefixAdmin}/products-category/create`
-                        class='btn btn-outline-success right'
+                        class='btn btn-outline-success right mb-3'
                     ) + Them moi
     
 
@@ -75,3 +88,4 @@ block main
                                                 data-id = item.id
                                                 button-delete) Xoa
 
+    +pagination(pagination)

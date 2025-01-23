@@ -8,14 +8,63 @@ const systemConfig = require('../../config/system');
 
 // [GET] /admin/products-category
 module.exports.index = async (req, res) => {
+    
     let find = {
         deleted: false,
     };
 
-    const records = await ProductCategory.find((find));
+    // Filter 
+
+    // End Filter
+
+    // Search
+    const objectSearch = searchHelper(req.query);
+
+    if(objectSearch.regex){
+        find.title = objectSearch.regex;
+    }
+
+    // End Search
+
+    // Pagination
+    const countRecords = await ProductCategory.countDocuments((find));
+
+    let objectPagination = paginationHelper({
+        currentPage: 1,
+        limitItem: 4
+    }, req.query, countRecords);
+
+    if(req.query.page) {
+        objectPagination.currentPage = parseInt(req.query.page);
+    }
+
+    // itemYouWant = (currentPage - 1) * itemsOnOnePage
+    objectPagination.skip = (objectPagination.currentPage - 1) * objectPagination.limitItem;
+    
+    // End Pagination
+
+    // Sort items
+    let sort = {};
+    
+    if(req.query.sortKey && req.query.sortValue){
+        sort[req.query.sortKey] = req.query.sortValue; 
+    }
+    else{
+        sort.position = 'desc';
+    }
+
+    console.log(sort);
+    // End sort items
+
+    const records = await ProductCategory.find(find)
+        .sort(sort)
+        .limit(objectPagination.limitItem)
+        .skip(objectPagination.skip);
 
     res.render('admin/pages/products-category/index.pug',{
-        records: records
+        records: records,
+        pagination: objectPagination,
+        keyword: objectSearch.keyword
         }
     )
 }
