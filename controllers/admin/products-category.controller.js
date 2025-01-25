@@ -70,8 +70,37 @@ module.exports.index = async (req, res) => {
 }
 
 // [GET] /admin/products-category/create
-module.exports.create = (req, res) => {
-    res.render('admin/pages/products-category/create.pug')
+module.exports.create = async (req, res) => {
+
+    let find = {
+        deleted: false,
+    }
+
+    function createTree(arr, parentId = ""){
+        const tree = [];
+        arr.forEach(item => {
+            if(item.parent_id == parentId){
+                const newItem = item;
+                const children = createTree(arr, item.id);
+                if(children.length > 0){
+                    newItem.children = children;
+                }
+                tree.push(newItem);
+            }
+        });
+        return tree;
+    }
+
+    const records = await ProductCategory.find(find);
+
+    const newRecords = createTree(records);
+
+    res.render('admin/pages/products-category/create.pug',{
+        pageTitle: "Tao danh muc san pham",
+        records: newRecords,
+        }
+    )
+
 }
 
 // [POST] /admin/products-category/create
