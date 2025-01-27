@@ -192,7 +192,7 @@ module.exports.edit = async (req, res) => {
     }
 }
 
-// [PATCH] admin/products/edit/id
+// [PATCH] admin/products/edit/:id
 module.exports.editPatch = async (req, res) => {
     if(req.file){
         req.body.thumbnail = `/uploads/${req.file.filename}`;
@@ -206,6 +206,7 @@ module.exports.editPatch = async (req, res) => {
         res.send('dit me may');
         req.flash('error', 'Cap nhat that bai');
     }
+
     // await Product.updateOne(_id = req.params.id, productFixed);
     // console.log(productFixed);
     // console.log(req.params);

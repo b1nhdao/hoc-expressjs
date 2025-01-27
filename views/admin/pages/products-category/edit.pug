@@ -1,0 +1,99 @@
+extends ../../layouts/default.pug
+include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
+
+block main
+    +alert-error(5000)
+
+    h1(class='mb-4') Chinh sua san pham 
+
+    form(
+        action=`${prefixAdmin}/products-category/edit/${category.id}?_method=PATCH`
+        id="form-create-product-category"
+        method="POST"
+        enctype="multipart/form-data"
+    ) 
+        div(class="form-group")
+            label(for="title") Tieu de 
+            input(type="text"
+            class="form-control"
+            id="title"
+            name="title"
+            value = category.title
+            required 
+            ) 
+        
+        div(class="form-group")
+            label(for="parent_id") Danh muc cha 
+            select(name="parent_id" id="parent_id" class="form-control")
+                option(value = category.parent_id) -- #{fatherCategoryTitle}
+                if(records)
+                    +select-tree(records)
+                    
+                    
+            //- input(
+            //-     type="text"
+            //-     class="form-control"
+            //-     id="parent_id"
+            //-     name="parent_id"
+            //-     )
+
+        div(class="form-group")
+            label(for="desc") Mo ta 
+            input(type="text"
+            class="form-control"
+            id="desc"
+            name="description"
+            rows="5"
+            value = category.description
+            )
+
+        div(class="form-group" upload-image)
+            label(for="thumbnail") Anh
+            input(type="file"
+            class="form-control-file"
+            id="thumbnail"
+            name="thumbnail"
+            accept="image/*"
+            upload-image-input
+            )
+            img(src= category.thumbnail , alt=category.title upload-image-preview class="image-preview")
+        div(class="form-group")
+            label(for="position") Vi tri
+            input(type="number"
+            class="form-control"
+            id="position"
+            name="position"
+            placeholder="Tu dong tang"
+            min= "1"
+            value= category.position
+            )
+
+
+        div(class="form-group form-check form-check-inline")
+            input(type="radio"
+            class="form-check-input"
+            id="status-inactive"
+            name="status"
+            value="inactive"
+            if category.status = inactive
+                checked
+            )
+            label(for="status-inactive" class="form-check-label") Khong hoat dong
+
+        div(class="form-group form-check form-check-inline")
+            input(type="radio"
+            class="form-check-input"
+            id="status-active"
+            name="status"
+            value="active"
+            if category.status = active
+                checked 
+            )
+            label(for="status-active" class="form-check-label") Hoat dong
+        
+        div(class="form-group")
+            button(type="submit"
+            class="btn btn-primary") sua
+
+    script(src="/admin/js/product.js")  
