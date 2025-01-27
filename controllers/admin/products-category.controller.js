@@ -123,24 +123,30 @@ module.exports.createPost = async (req, res) => {
 
 // [GET] /admin/products-category/edit/:id
 module.exports.edit = async (req, res) => {
-    const object = await ProductCategory.findOne({_id: req.params.id});
+    try{
+        const object = await ProductCategory.findOne({_id: req.params.id});
 
-    let fatherCategoryTitle = 'Chon danh muc cha --';
-    if(object.parent_id){
-        fatherCategory = await ProductCategory.findOne({_id: object.parent_id}).select('title -_id');
-        fatherCategoryTitle = fatherCategory.title
+        let fatherCategoryTitle = 'Chon danh muc cha --';
+        if(object.parent_id){
+            fatherCategory = await ProductCategory.findOne({_id: object.parent_id}).select('title -_id');
+            fatherCategoryTitle = fatherCategory.title
+        }
+    
+        const recordsTest = await ProductCategory.find({}).select('title parent_id _id');
+    
+        const newRecords = createTreeHelper.tree(recordsTest);
+    
+        res.render('admin/pages/products-category/edit', {
+            pageTitle: 'Chinh sua danh muc SP',
+            fatherCategoryTitle: fatherCategoryTitle,
+            category: object,
+            records: newRecords,
+        });
     }
-
-    const recordsTest = await ProductCategory.find({}).select('title parent_id _id');
-
-    const newRecords = createTreeHelper.tree(recordsTest);
-
-    res.render('admin/pages/products-category/edit', {
-        pageTitle: 'Chinh sua danh muc SP',
-        fatherCategoryTitle: fatherCategoryTitle,
-        category: object,
-        records: newRecords,
-    })
+    catch(error){
+        res.redirect(`${systemConfig.prefixAdmin}/products-category`)
+    }
+    
 }
 
 // [PATCH] /admin/products-category/edit/:id
@@ -153,9 +159,10 @@ module.exports.editPatch = async (req, res) => {
     req.body.position = parseInt(req.body.position);
     try{
         await ProductCategory.updateOne({_id: req.params.id}, req.body)
+        res.redirect(`/admin/products-category/edit/${req.params.id}`);
+
     }
     catch(error){
         res.send('dit me may');
     }
-    res.redirect(`/admin/products-category/edit/${req.params.id}`);
 }

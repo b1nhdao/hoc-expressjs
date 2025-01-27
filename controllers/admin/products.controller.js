@@ -5,6 +5,9 @@ const searchHelper = require('../../helpers/search');
 const paginationHelper = require('../../helpers/pagination');
 
 const systemConfig = require('../../config/system');
+const ProductCategory = require('../../models/product-category.model');
+
+const createTreeHelper = require('../../helpers/createTree');
 
 // [GET] /admin/products
 module.exports.index = async (req, res) => {
@@ -136,9 +139,12 @@ module.exports.changeMulti = async (req, res) => {
 }
 
 // [GET] /admin/products/create
-module.exports.create = (req, res) => {
+module.exports.create = async (req, res) => {
+    const records = await ProductCategory.find().select('title parent_id _id')
+    const categories = createTreeHelper.tree(records);
     res.render("admin/pages/products/create", {
-        pageTitle: "Them moi san pham"
+        pageTitle: "Them moi san pham",
+        category: categories,
     });
 }
 
@@ -180,10 +186,15 @@ module.exports.edit = async (req, res) => {
         const find = {
             _id: req.params.id
         }
-        const product = await Product.findOne(find)
+        const product = await Product.findOne(find);
+
+        const category = await ProductCategory.find().select('title parent_id _id');
+
+        const categoryTree = createTreeHelper.tree(category);
         res.render('admin/pages/products/edit', {
             pageTitle: 'Chinh sua san pham',
-            product: product
+            product: product,
+            category: categoryTree
         });
     }
     catch(error){
@@ -216,6 +227,7 @@ module.exports.editPatch = async (req, res) => {
     res.redirect(`back`);
 }
 
+// [GET] /admin/products/detai/:id
 module.exports.detail = async (req, res) => {
     // res.send('ok');
     // console.log(req.params.id);

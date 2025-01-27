@@ -1,5 +1,7 @@
 extends ../../layouts/default.pug
 include ../../mixins/alert.pug
+include ../../mixins/select-tree.pug
+
 
 block main
     +alert-success(5000)
@@ -13,6 +15,17 @@ block main
         method="POST"
         enctype="multipart/form-data"
     ) 
+        div(class="form-group")
+            label(for="product_category_id") Tieu de 
+            select(
+            class="form-control"
+            id="product_category_id"
+            name="product_category_id"
+            ) 
+                option(value="") -- Chon danh muc cha --
+                if (category) 
+                    +select-tree(category, 1, product.product_category_id)
+
         div(class="form-group")
             label(for="title") Tieu de 
             input(type="text"

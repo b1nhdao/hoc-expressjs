@@ -26,9 +26,9 @@ block main
         div(class="form-group")
             label(for="parent_id") Danh muc cha 
             select(name="parent_id" id="parent_id" class="form-control")
-                option(value = category.parent_id) -- #{fatherCategoryTitle}
+                option(value = '') -- Chon danh muc cha --
                 if(records)
-                    +select-tree(records)
+                    +select-tree(records, 1, category.parent_id)
                     
                     
             //- input(
