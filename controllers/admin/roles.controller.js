@@ -47,6 +47,7 @@ module.exports.edit = async (req, res) => {
     }
 }
 
+// [PATCH] /admin/edit
 module.exports.editPatch = async (req, res) => {
     try{
         await Role.updateOne({_id: req.params.id}, req.body)

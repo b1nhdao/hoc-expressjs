@@ -41,3 +41,23 @@ if(buttonsDelete){
     });
 }
 
+// button restore
+const buttonsRestore = document.querySelectorAll('[button-restort]');
+if(buttonsRestore){
+    const formRestore = document.querySelector('#form-restore');
+    let path = formRestore.getAttribute('data-path');
+
+    buttonsRestore.forEach(button => {
+        button.addEventListener('click', () => {
+            const isConfirm = confirm('Ban co muon khoi phuc lai san pham nay khong ?');
+            if(isConfirm){
+                action = `${path}/${button.getAttribute('data-id')}/?_method=PATCH`
+                console.log(action);
+                formRestore.action = action;
+                formRestore.submit();
+            }
+        });
+    });
+}
+// end button restore
+

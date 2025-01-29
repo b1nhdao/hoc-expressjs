@@ -244,3 +244,44 @@ module.exports.detail = async (req, res) => {
         res.send(`Loi gi ko biet luon. alicia meu :D \n ${error}`)
     }
 }
+
+// [GET] admin/products/deleted
+module.exports.deleted = async (req, res) => {
+    let find = {
+        deleted: true,
+    }
+    let sort = {
+        position: 'asc',
+    }
+    const records = await Product.find(find).sort(sort)
+    res.render('admin/pages/products/deleted', {
+        pageTitle: 'Thung rac',
+        records: records,
+    })
+}
+
+// [PATCH] admin/products/deleted/restore/:id
+module.exports.deletedRestore = async (req, res) => {
+    try{
+        const id = req.params.id
+        await Product.updateOne({_id: id},{deleted: false});
+        req.flash('success', 'Da khoi phuc san pham thanh cong !!')
+    }
+    catch(error){
+        req.flash('error', 'Da co loi say ra' + error)
+    }
+    res.redirect('back');
+}
+
+// [DELETE] admin/products/deleted/:id
+module.exports.deletedDelete = async (req, res) => {
+    try{
+        const id = req.params.id
+        await Product.deleteOne({_id: id});
+        req.flash('success', 'Da khoi phuc san pham thanh cong !!')
+    }
+    catch(error){
+        req.flash('error', 'Da co loi say ra' + error)
+    }
+    res.redirect('back');
+}

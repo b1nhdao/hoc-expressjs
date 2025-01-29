@@ -32,4 +32,10 @@ router.patch('/edit/:id',upload.single('thumbnail'), validate.createPost, contro
 
 router.get('/detail/:id', controller.detail);
 
+router.get('/deleted', controller.deleted);
+
+router.patch('/deleted/:id', controller.deletedRestore)
+
+router.delete('/deleted/:id', controller.deletedDelete)
+
 module.exports = router;
