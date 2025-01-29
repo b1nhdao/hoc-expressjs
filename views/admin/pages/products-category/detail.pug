@@ -1,0 +1,38 @@
+extends ../../layouts/default.pug
+
+block main 
+    h1(class="mb-4") #{category.title}
+
+    if(category.parent_title)
+        h4(class="mb-4") Danh muc cha:
+            a(href=`${prefixAdmin}/products-category/detail/${category.parent_id}`)  #{category.parent_title}
+
+    h4(class="mb-4") Danh sach danh muc con:
+    if childCategories && childCategories.length > 0
+        ul(style="list-style: none;")
+            .row 
+                each item in childCategories
+                    li
+                    a(href= `${prefixAdmin}/products-category/detail/${item._id}` class="ml-2") #{item.title}
+    else
+        p Khong co
+
+    div(class="mb-4")
+        img(src= category.thumbnail, alt=category.title  style="width: 100px")
+
+    div(class="mb-4")
+        span Trang thai:
+        if (category.status === "active")
+            span(class="badge badge-success") Hoat dong 
+        else 
+            span(class="badge badge-danger") Dung hoat dong
+
+    div(class="mb-4") Vi tri: <b>#{category.position}</b>
+
+    div(class="mb-4") Mo ta: <b>#{category.description}</b>
+    
+    
+
+    a(href=`${prefixAdmin}/products/edit/${category.id}` class="btn btn-warning") Chinh sua
+
+    script(src="/admin/js/category.js") 

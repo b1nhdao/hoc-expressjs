@@ -10,7 +10,9 @@ const productCategorySchema = new mongoose.Schema(
         title: String,
         parent_id: {
             type: String,
-            default: ''
+            // type: mongoose.Schema.Types.ObjectId, // Change this
+            ref: 'ProductCategory',
+            default: '',
         },
         description: String,
         thumbnail: String,

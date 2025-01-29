@@ -15,10 +15,6 @@ module.exports.index = async (req, res) => {
         deleted: false,
     };
 
-    // Filter 
-
-    // End Filter
-
     // Search
     const objectSearch = searchHelper(req.query);
 
@@ -56,12 +52,11 @@ module.exports.index = async (req, res) => {
     }
     // End sort items
 
-
-
-
     const records = await ProductCategory.find(find);
 
     const newRecords = createTreeHelper.tree(records);
+
+    console.log(records);
 
     res.render('admin/pages/products-category/index.pug',{
         records: newRecords,
@@ -165,4 +160,32 @@ module.exports.editPatch = async (req, res) => {
     catch(error){
         res.send('dit me may');
     }
+}
+
+// [GET] /admin/products-category/detail/:id
+module.exports.detail = async (req, res) => {
+    const id = req.params.id    
+    const category = await ProductCategory.findOne({ _id: id })
+        .lean(); // Convert Mongoose document to plain object
+
+    if(!category){
+        res.send('404');
+    }
+    
+    // get parent title
+    if(category.parent_id){
+        const parentCategory = await ProductCategory.findOne({_id: category.parent_id}).select('title id').lean()
+        category.parent_title = parentCategory.title;
+    }
+
+    console.log(category);
+
+    // get child categories
+    const childCategories = await ProductCategory.find({parent_id: id}).lean();
+
+    res.render('admin/pages/products-category/detail', {
+        pageTitle: 'Chinh sua danh muc san pham',
+        category: category,
+        childCategories: childCategories,
+    });
 }
