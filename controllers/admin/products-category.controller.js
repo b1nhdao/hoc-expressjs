@@ -56,7 +56,7 @@ module.exports.index = async (req, res) => {
 
     const newRecords = createTreeHelper.tree(records);
 
-    console.log(records);
+    // console.log(records);
 
     res.render('admin/pages/products-category/index.pug',{
         records: newRecords,
@@ -146,7 +146,7 @@ module.exports.edit = async (req, res) => {
 
 // [PATCH] /admin/products-category/edit/:id
 module.exports.editPatch = async (req, res) => {
-    console.log(req.file);
+    // console.log(req.file);
     // ???? where the fuck is my filename ?
     if(req.file){
         req.body.thumbnail = `/uploads/${req.file.filename}`;
@@ -178,8 +178,6 @@ module.exports.detail = async (req, res) => {
         category.parent_title = parentCategory.title;
     }
 
-    console.log(category);
-
     // get child categories
     const childCategories = await ProductCategory.find({parent_id: id}).lean();
 
@@ -188,4 +186,17 @@ module.exports.detail = async (req, res) => {
         category: category,
         childCategories: childCategories,
     });
+}
+
+// [DELETE] admin/products-category/:id
+module.exports.delete = async (req, res) => {
+    try{
+        const id = req.params.id;
+        await ProductCategory.updateOne({_id: id}, {deleted: true});
+        req.flash('success', 'xong')
+    }
+    catch(error){
+        req.flash('error ' + error)
+    }
+    res.redirect('back');
 }

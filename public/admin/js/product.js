@@ -1,4 +1,3 @@
-
 const buttonsChangeStatus = document.querySelectorAll('[button-change-status]');
 if(buttonsChangeStatus){
     const formChangeStatus = document.querySelector('#form-change-status');
@@ -24,6 +23,7 @@ if(buttonsChangeStatus){
 const buttonsDelete = document.querySelectorAll('[button-delete]');
 if(buttonsDelete){
     const formDelete = document.querySelector('#form-delete');
+    console.log(formDelete);
     let path = formDelete.getAttribute('data-path');
     // console.log(formDelete.action + path);
     buttonsDelete.forEach(button => {

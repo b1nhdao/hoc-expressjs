@@ -20,4 +20,6 @@ router.patch('/edit/:id',upload.single('thumbnail'), validate.createPost, contro
 
 router.get('/detail/:id', controller.detail);
 
+router.delete('/delete/:id', controller.delete);
+
 module.exports = router; 
